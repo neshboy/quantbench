@@ -100,7 +100,7 @@ class GgufByteWindow {
     this.buf = next;
   }
 
-  private take(n: number): Buffer {
+  readBytes(n: number): Buffer {
     this.require(n);
     const slice = this.buf.subarray(this.cursor, this.cursor + n);
     this.cursor += n;
@@ -108,41 +108,41 @@ class GgufByteWindow {
   }
 
   readU8(): number {
-    return this.take(1).readUInt8(0);
+    return this.readBytes(1).readUInt8(0);
   }
   readI8(): number {
-    return this.take(1).readInt8(0);
+    return this.readBytes(1).readInt8(0);
   }
   readU16(): number {
-    return this.take(2).readUInt16LE(0);
+    return this.readBytes(2).readUInt16LE(0);
   }
   readI16(): number {
-    return this.take(2).readInt16LE(0);
+    return this.readBytes(2).readInt16LE(0);
   }
   readU32(): number {
-    return this.take(4).readUInt32LE(0);
+    return this.readBytes(4).readUInt32LE(0);
   }
   readI32(): number {
-    return this.take(4).readInt32LE(0);
+    return this.readBytes(4).readInt32LE(0);
   }
   readF32(): number {
-    return this.take(4).readFloatLE(0);
+    return this.readBytes(4).readFloatLE(0);
   }
   readF64(): number {
-    return this.take(8).readDoubleLE(0);
+    return this.readBytes(8).readDoubleLE(0);
   }
   readU64(): bigint {
-    return this.take(8).readBigUInt64LE(0);
+    return this.readBytes(8).readBigUInt64LE(0);
   }
   readI64(): bigint {
-    return this.take(8).readBigInt64LE(0);
+    return this.readBytes(8).readBigInt64LE(0);
   }
   readBool(): boolean {
     return this.readU8() !== 0;
   }
   readString(): string {
     const length = Number(this.readU64());
-    return this.take(length).toString("utf8");
+    return this.readBytes(length).toString("utf8");
   }
 }
 
@@ -195,7 +195,7 @@ function readMetadataValue(w: GgufByteWindow, type: GgufMetadataValueType): Gguf
 export function readGgufFile(path: string): GgufFile {
   const w = new GgufByteWindow(path);
   try {
-    const magic = w.take(4).toString("ascii");
+    const magic = w.readBytes(4).toString("ascii");
     if (magic !== "GGUF") {
       throw new Error(`Not a GGUF file: expected magic bytes "GGUF", got "${magic}".`);
     }
