@@ -1,0 +1,40 @@
+{
+  "name": "quantbench",
+  "version": "0.1.0",
+  "description": "Local benchmark harness that measures a quantized GGUF model's real-world quality/speed tradeoff: runs a deterministic small task suite (coding, instruction-following, reasoning) against a locally-runnable quantized model and reports pass/fail plus tokens/sec.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "quantbench": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "keywords": [
+    "llm",
+    "gguf",
+    "quantization",
+    "benchmark",
+    "llama.cpp",
+    "ollama",
+    "cli"
+  ]
+}
