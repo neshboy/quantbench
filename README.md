@@ -257,6 +257,12 @@ inputs with no network or model dependency:
 - **`general.file_type` isn't present in every GGUF file** (some quantizer tools omit it). When absent, QuantBench
   falls back to naming the quant after whichever ggml tensor type accounts for the most on-disk bytes, which can't
   distinguish e.g. Q4_K_S from Q4_K_M (both use the plain "Q4_K" tensor type) -- see `src/gguf.ts`.
+- **The coding-task checker executes model-generated Python with no sandboxing.** `src/tasks/pythonCheck.ts` extracts
+  the Python function the model wrote and runs it in a real `python`/`python3` subprocess, bounded only by a 5s
+  wall-clock timeout -- there is no container, restricted OS user, or network isolation around it. Benchmarking an
+  adversarial or badly-hallucinating model executes arbitrary code with the full privileges of whoever runs
+  QuantBench. Only run QuantBench's coding tasks against models/output you trust, and consider sandboxing the whole
+  process (container, locked-down user, disabled networking) if that's not the case.
 
 ## Development
 
